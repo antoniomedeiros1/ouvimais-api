@@ -17,6 +17,8 @@ public class Cidadao extends User {
     private String cpf;
     private String telefone;
     private String dataNasc;
+    private String numero;
+    private String complemento;
 
     @ManyToOne
     private Endereco endereco;

@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class Elogio extends Ocorrencia {
 
     private String tipo;
+    private String nota;
 }

@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Denuncia extends Ocorrencia {
-
     private String tipo;
 }
