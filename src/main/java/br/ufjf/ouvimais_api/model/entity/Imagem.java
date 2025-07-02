@@ -1,14 +1,11 @@
 package br.ufjf.ouvimais_api.model.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Imagem {
 
     @Id
@@ -19,4 +16,28 @@ public class Imagem {
 
     @ManyToOne
     public Reclamacao reclamacao;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public Reclamacao getReclamacao() {
+        return reclamacao;
+    }
+
+    public void setReclamacao(Reclamacao reclamacao) {
+        this.reclamacao = reclamacao;
+    }
 }
