@@ -1,15 +1,16 @@
 package br.ufjf.ouvimais_api.api.controller;
 
 import br.ufjf.ouvimais_api.api.dto.DenunciaDTO;
+import br.ufjf.ouvimais_api.api.dto.DenunciaDTO;
+import br.ufjf.ouvimais_api.model.entity.Denuncia;
 import br.ufjf.ouvimais_api.model.entity.Denuncia;
 import br.ufjf.ouvimais_api.service.DenunciaService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -27,6 +28,16 @@ public class DenunciaController {
     public ResponseEntity get() {
         List<Denuncia> denuncias = service.getDenuncias();
         return ResponseEntity.ok(denuncias.stream().map(DenunciaDTO::create).collect(Collectors.toList()));
+    }
+
+
+    @GetMapping("/id")
+    public ResponseEntity get(@PathVariable("id") Long id) {
+        Optional<Denuncia> denuncia = service.getDenunciaById(id);
+        if (!denuncia.isPresent()){
+            return new ResponseEntity("Denuncia nao encontrado", HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(denuncia.map(DenunciaDTO::create));
     }
 
 }
