@@ -1,14 +1,8 @@
 package br.ufjf.ouvimais_api.api.dto;
 
 import br.ufjf.ouvimais_api.model.entity.Setor;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class SetorDTO {
     private Long id;
     private String nome;
@@ -17,5 +11,29 @@ public class SetorDTO {
     public static SetorDTO create(Setor setor) {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(setor, SetorDTO.class);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public Long getIdInstituicao() {
+        return idInstituicao;
+    }
+
+    public void setIdInstituicao(Long idInstituicao) {
+        this.idInstituicao = idInstituicao;
     }
 }
