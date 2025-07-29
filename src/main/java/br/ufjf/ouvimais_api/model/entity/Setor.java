@@ -12,6 +12,8 @@ public class Setor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
+    private String nome;
+
     @ManyToOne
     private Instituicao instituicao;
 
