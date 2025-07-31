@@ -11,7 +11,7 @@ public class InstituicaoDTO {
     private String site;
     private String numero;
     private String complemento;
-    private String idEndereco;
+    private Long idEndereco;
 
     public static InstituicaoDTO create(Instituicao instituicao) {
         ModelMapper modelMapper = new ModelMapper();
@@ -74,11 +74,11 @@ public class InstituicaoDTO {
         this.complemento = complemento;
     }
 
-    public String getIdEndereco() {
+    public Long getIdEndereco() {
         return idEndereco;
     }
 
-    public void setIdEndereco(String idEndereco) {
+    public void setIdEndereco(Long idEndereco) {
         this.idEndereco = idEndereco;
     }
 }

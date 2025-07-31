@@ -7,7 +7,7 @@ public class FaqDTO {
     private Long id;
     private String pergunta;
     private String resposta;
-    private String idInstituicao;
+    private Long idInstituicao;
 
 
     public static FaqDTO create(Faq faq) {
@@ -39,11 +39,11 @@ public class FaqDTO {
         this.resposta = resposta;
     }
 
-    public String getIdInstituicao() {
+    public Long getIdInstituicao() {
         return idInstituicao;
     }
 
-    public void setIdInstituicao(String idInstituicao) {
+    public void setIdInstituicao(Long idInstituicao) {
         this.idInstituicao = idInstituicao;
     }
 }

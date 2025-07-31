@@ -19,9 +19,9 @@ public class SetorService {
 
     public Optional<Setor> getSetorById(Long id) { return repository.findById(id); }
 
-    public void save(Setor setor) {
+    public Setor save(Setor setor) {
         // validar regras de negocio
-        repository.save(setor);
+        return repository.save(setor);
     }
 
     public void delete(Setor setor) {

@@ -19,9 +19,9 @@ public class InstituicaoService {
 
     public Optional<Instituicao> getInstituicaoById(Long id) { return repository.findById(id); }
 
-    public void save(Instituicao instituicao) {
+    public Instituicao save(Instituicao instituicao) {
         // validar regras de negocio
-        repository.save(instituicao);
+        return repository.save(instituicao);
     }
 
     public void delete(Instituicao instituicao) {

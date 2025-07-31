@@ -16,6 +16,8 @@ public class Instituicao {
     private String email;
     private String telefone;
     private String site;
+    private String numero;
+    private String complemento;
 
     @ManyToOne
     private Endereco endereco;
@@ -66,5 +68,21 @@ public class Instituicao {
 
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
+    }
+
+    public String getComplemento() {
+        return complemento;
+    }
+
+    public void setComplemento(String complemento) {
+        this.complemento = complemento;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
     }
 }

@@ -19,9 +19,9 @@ public class FuncionarioService {
 
     public Optional<Funcionario> getFuncionarioById(Long id) { return repository.findById(id); }
 
-    public void save(Funcionario funcionario) {
+    public Funcionario save(Funcionario funcionario) {
         // validar regras de negocio
-        repository.save(funcionario);
+        return repository.save(funcionario);
     }
 
     public void delete(Funcionario funcionario) {

@@ -19,9 +19,9 @@ public class FaqService {
 
     public Optional<Faq> getFaqById(Long id) { return repository.findById(id); }
 
-    public void save(Faq faq) {
+    public Faq save(Faq faq) {
         // validar regras de negocio
-        repository.save(faq);
+        return repository.save(faq);
     }
 
     public void delete(Faq faq) {

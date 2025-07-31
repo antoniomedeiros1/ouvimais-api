@@ -19,9 +19,9 @@ public class ReclamacaoService {
 
     public Optional<Reclamacao> getReclamacaoById(Long id) { return repository.findById(id); }
 
-    public void save(Reclamacao reclamacao) {
+    public Reclamacao save(Reclamacao reclamacao) {
         // validar regras de negocio
-        repository.save(reclamacao);
+        return repository.save(reclamacao);
     }
 
     public void delete(Reclamacao reclamacao) {

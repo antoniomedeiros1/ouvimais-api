@@ -44,7 +44,7 @@ public class DenunciaController {
     }
 
 
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     public ResponseEntity get(@PathVariable("id") Long id) {
         Optional<Denuncia> denuncia = service.getDenunciaById(id);
         if (!denuncia.isPresent()){

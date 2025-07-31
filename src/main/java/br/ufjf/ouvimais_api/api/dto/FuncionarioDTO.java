@@ -8,7 +8,7 @@ public class FuncionarioDTO {
     private String nome;
     private String email;
     private String matricula;
-    private String idInstituicao;
+    private Long idInstituicao;
     private String nomeInstituicao;
 
     public static FuncionarioDTO create(Funcionario funcionario) {
@@ -50,11 +50,11 @@ public class FuncionarioDTO {
         this.matricula = matricula;
     }
 
-    public String getIdInstituicao() {
+    public Long getIdInstituicao() {
         return idInstituicao;
     }
 
-    public void setIdInstituicao(String idInstituicao) {
+    public void setIdInstituicao(Long idInstituicao) {
         this.idInstituicao = idInstituicao;
     }
 

@@ -42,7 +42,7 @@ public class ElogioController {
         return ResponseEntity.ok(elogios.stream().map(ElogioDTO::create).collect(Collectors.toList()));
     }
 
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     public ResponseEntity get(@PathVariable("id") Long id) {
         Optional<Elogio> elogio = service.getElogioById(id);
         if (!elogio.isPresent()){

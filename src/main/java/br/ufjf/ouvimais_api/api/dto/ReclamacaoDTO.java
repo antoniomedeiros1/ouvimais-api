@@ -6,12 +6,12 @@ import org.modelmapper.ModelMapper;
 public class ReclamacaoDTO {
     private Long id;
     private String tipo;
-    private String nome;
     private String descricao;
     private String status;
     private String timestamp;
     private Long idCidadao;
     private Long idSetor;
+    private Long idEndereco;
 
     public static ReclamacaoDTO create(Reclamacao reclamacao) {
         ModelMapper modelMapper = new ModelMapper();
@@ -32,14 +32,6 @@ public class ReclamacaoDTO {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
     }
 
     public String getDescricao() {
@@ -80,5 +72,13 @@ public class ReclamacaoDTO {
 
     public void setIdSetor(Long idSetor) {
         this.idSetor = idSetor;
+    }
+
+    public Long getIdEndereco() {
+        return idEndereco;
+    }
+
+    public void setIdEndereco(long idEndereco) {
+        this.idEndereco = idEndereco;
     }
 }

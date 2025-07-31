@@ -39,7 +39,7 @@ public class CidadaoController {
         return ResponseEntity.ok(cidadaos.stream().map(CidadaoDTO::create).collect(Collectors.toList()));
     }
 
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     public ResponseEntity get(@PathVariable("id") Long id) {
         Optional<Cidadao> cidadao = service.getCidadaoById(id);
         if (!cidadao.isPresent()){

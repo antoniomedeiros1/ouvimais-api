@@ -2,9 +2,14 @@ package br.ufjf.ouvimais_api.api.controller;
 
 import br.ufjf.ouvimais_api.api.dto.FaqDTO;
 import br.ufjf.ouvimais_api.api.dto.FaqDTO;
+import br.ufjf.ouvimais_api.api.dto.FaqDTO;
+import br.ufjf.ouvimais_api.model.entity.Faq;
+import br.ufjf.ouvimais_api.model.entity.Instituicao;
 import br.ufjf.ouvimais_api.model.entity.Faq;
 import br.ufjf.ouvimais_api.model.entity.Faq;
+import br.ufjf.ouvimais_api.service.InstituicaoService;
 import br.ufjf.ouvimais_api.service.FaqService;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +24,14 @@ import java.util.stream.Collectors;
 public class FaqController {
 
     private final FaqService service;
+    private final InstituicaoService instituicaoService;
 
-    public FaqController(FaqService service) {
+    public FaqController(
+            FaqService service,
+            InstituicaoService instituicaoService
+    ) {
         this.service = service;
+        this.instituicaoService = instituicaoService;
     }
 
     @GetMapping()
@@ -30,13 +40,38 @@ public class FaqController {
         return ResponseEntity.ok(faqs.stream().map(FaqDTO::create).collect(Collectors.toList()));
     }
 
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     public ResponseEntity get(@PathVariable("id") Long id) {
         Optional<Faq> faq = service.getFaqById(id);
         if (!faq.isPresent()){
             return new ResponseEntity("Faq nao encontrado", HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(faq.map(FaqDTO::create));
+    }
+
+    @PostMapping()
+    public ResponseEntity post(@RequestBody FaqDTO dto) {
+        try {
+            Faq faq = convert(dto);
+            faq = service.save(faq);
+            return new ResponseEntity(faq, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    public Faq convert(FaqDTO dto) {
+        ModelMapper modelMapper = new ModelMapper();
+        Faq faq = modelMapper.map(dto, Faq.class);
+        if (dto.getIdInstituicao() != null) {
+            Optional<Instituicao> instituicao = instituicaoService.getInstituicaoById(dto.getIdInstituicao());
+            if (!instituicao.isPresent()) {
+                faq.setInstituicao(null);
+            } else {
+                faq.setInstituicao(instituicao.get());
+            }
+        }
+        return faq;
     }
 
 }
