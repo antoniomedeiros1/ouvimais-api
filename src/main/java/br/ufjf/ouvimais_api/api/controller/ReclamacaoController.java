@@ -82,6 +82,20 @@ public class ReclamacaoController {
         }
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        Optional<Reclamacao> reclamacao = service.getReclamacaoById(id);
+        if (!reclamacao.isPresent()) {
+            return new ResponseEntity("Reclamacao não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            service.delete(reclamacao.get());
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     public Reclamacao convert(ReclamacaoDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         Reclamacao reclamacao = modelMapper.map(dto, Reclamacao.class);

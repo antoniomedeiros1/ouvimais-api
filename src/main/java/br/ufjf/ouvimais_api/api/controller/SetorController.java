@@ -75,6 +75,20 @@ public class SetorController {
         }
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        Optional<Setor> setor = service.getSetorById(id);
+        if (!setor.isPresent()) {
+            return new ResponseEntity("Setor não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            service.delete(setor.get());
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     public Setor convert(SetorDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         Setor setor = modelMapper.map(dto, Setor.class);

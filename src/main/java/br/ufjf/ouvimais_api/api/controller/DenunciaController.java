@@ -80,6 +80,20 @@ public class DenunciaController {
         }
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        Optional<Denuncia> denuncia = service.getDenunciaById(id);
+        if (!denuncia.isPresent()) {
+            return new ResponseEntity("Denuncia não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            service.delete(denuncia.get());
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     public Denuncia convert(DenunciaDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         Denuncia denuncia = modelMapper.map(dto, Denuncia.class);

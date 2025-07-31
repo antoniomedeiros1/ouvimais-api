@@ -76,6 +76,20 @@ public class CidadaoController {
         }
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        Optional<Cidadao> cidadao = service.getCidadaoById(id);
+        if (!cidadao.isPresent()) {
+            return new ResponseEntity("Cidadao não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            service.delete(cidadao.get());
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     public Cidadao convert(CidadaoDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         Cidadao cidadao = modelMapper.map(dto, Cidadao.class);

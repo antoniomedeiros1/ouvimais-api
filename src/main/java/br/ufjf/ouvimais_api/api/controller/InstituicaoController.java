@@ -75,6 +75,20 @@ public class InstituicaoController {
         }
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        Optional<Instituicao> instituicao = service.getInstituicaoById(id);
+        if (!instituicao.isPresent()) {
+            return new ResponseEntity("Instituicao não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            service.delete(instituicao.get());
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     public Instituicao convert(InstituicaoDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         Instituicao instituicao = modelMapper.map(dto, Instituicao.class);

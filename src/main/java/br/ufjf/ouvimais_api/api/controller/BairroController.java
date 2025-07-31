@@ -72,6 +72,20 @@ public class BairroController {
         }
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        Optional<Bairro> bairro = service.getBairroById(id);
+        if (!bairro.isPresent()) {
+            return new ResponseEntity("Bairro não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            service.delete(bairro.get());
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     public Bairro convert(BairroDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         Bairro bairro = modelMapper.map(dto, Bairro.class);

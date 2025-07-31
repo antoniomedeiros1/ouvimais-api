@@ -49,6 +49,17 @@ public class EnderecoController {
         return ResponseEntity.ok(endereco.map(EnderecoDTO::create));
     }
 
+    @PostMapping()
+    public ResponseEntity post(@RequestBody EnderecoDTO dto) {
+        try {
+            Endereco endereco = convert(dto);
+            endereco = service.save(endereco);
+            return new ResponseEntity(endereco, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @PutMapping("{id}")
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody EnderecoDTO dto) {
         if (!service.getEnderecoById(id).isPresent()) {
@@ -64,12 +75,15 @@ public class EnderecoController {
         }
     }
 
-    @PostMapping()
-    public ResponseEntity post(@RequestBody EnderecoDTO dto) {
+    @DeleteMapping("{id}")
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        Optional<Endereco> endereco = service.getEnderecoById(id);
+        if (!endereco.isPresent()) {
+            return new ResponseEntity("Endereco não encontrado", HttpStatus.NOT_FOUND);
+        }
         try {
-            Endereco endereco = convert(dto);
-            endereco = service.save(endereco);
-            return new ResponseEntity(endereco, HttpStatus.CREATED);
+            service.delete(endereco.get());
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

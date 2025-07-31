@@ -75,6 +75,20 @@ public class FaqController {
         }
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        Optional<Faq> faq = service.getFaqById(id);
+        if (!faq.isPresent()) {
+            return new ResponseEntity("Faq não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            service.delete(faq.get());
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     public Faq convert(FaqDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         Faq faq = modelMapper.map(dto, Faq.class);

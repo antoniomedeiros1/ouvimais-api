@@ -78,6 +78,20 @@ public class ElogioController {
         }
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        Optional<Elogio> elogio = service.getElogioById(id);
+        if (!elogio.isPresent()) {
+            return new ResponseEntity("Elogio não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            service.delete(elogio.get());
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     public Elogio convert(ElogioDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         Elogio elogio = modelMapper.map(dto, Elogio.class);
