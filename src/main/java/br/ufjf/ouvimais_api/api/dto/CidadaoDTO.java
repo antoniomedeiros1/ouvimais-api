@@ -15,7 +15,7 @@ public class CidadaoDTO {
     private String dataNasc;
     private String numero;
     private String complemento;
-    private String idEndereco;
+    private Long idEndereco;
 
     public static CidadaoDTO create(Cidadao cidadao) {
         ModelMapper modelMapper = new ModelMapper();
@@ -86,11 +86,11 @@ public class CidadaoDTO {
         this.complemento = complemento;
     }
 
-    public String getIdEndereco() {
+    public Long getIdEndereco() {
         return idEndereco;
     }
 
-    public void setIdEndereco(String idEndereco) {
+    public void setIdEndereco(Long idEndereco) {
         this.idEndereco = idEndereco;
     }
 }

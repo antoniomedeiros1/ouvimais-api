@@ -2,9 +2,14 @@ package br.ufjf.ouvimais_api.api.controller;
 
 import br.ufjf.ouvimais_api.api.dto.EnderecoDTO;
 import br.ufjf.ouvimais_api.api.dto.EnderecoDTO;
+import br.ufjf.ouvimais_api.api.dto.EnderecoDTO;
+import br.ufjf.ouvimais_api.model.entity.Endereco;
+import br.ufjf.ouvimais_api.model.entity.Bairro;
 import br.ufjf.ouvimais_api.model.entity.Endereco;
 import br.ufjf.ouvimais_api.model.entity.Endereco;
+import br.ufjf.ouvimais_api.service.BairroService;
 import br.ufjf.ouvimais_api.service.EnderecoService;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +24,14 @@ import java.util.stream.Collectors;
 public class EnderecoController {
 
     private final EnderecoService service;
+    private final BairroService bairroService;
 
-    public EnderecoController(EnderecoService service) {
+    public EnderecoController(
+            EnderecoService service,
+            BairroService bairroService
+    ) {
         this.service = service;
+        this.bairroService = bairroService;
     }
 
     @GetMapping()
@@ -37,6 +47,31 @@ public class EnderecoController {
             return new ResponseEntity("Endereco nao encontrado", HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(endereco.map(EnderecoDTO::create));
+    }
+
+    @PostMapping()
+    public ResponseEntity post(@RequestBody EnderecoDTO dto) {
+        try {
+            Endereco endereco = convert(dto);
+            endereco = service.save(endereco);
+            return new ResponseEntity(endereco, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    public Endereco convert(EnderecoDTO dto) {
+        ModelMapper modelMapper = new ModelMapper();
+        Endereco endereco = modelMapper.map(dto, Endereco.class);
+        if (dto.getIdBairro() != null) {
+            Optional<Bairro> bairro = bairroService.getBairroById(dto.getIdBairro());
+            if (!bairro.isPresent()) {
+                endereco.setBairro(null);
+            } else {
+                endereco.setBairro(bairro.get());
+            }
+        }
+        return endereco;
     }
 
 }

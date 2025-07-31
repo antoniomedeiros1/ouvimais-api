@@ -1,11 +1,14 @@
 package br.ufjf.ouvimais_api.api.controller;
 
-import br.ufjf.ouvimais_api.api.dto.BairroDTO;
 import br.ufjf.ouvimais_api.api.dto.CidadaoDTO;
-import br.ufjf.ouvimais_api.model.entity.Bairro;
+import br.ufjf.ouvimais_api.api.dto.CidadaoDTO;
 import br.ufjf.ouvimais_api.model.entity.Cidadao;
+import br.ufjf.ouvimais_api.model.entity.Cidadao;
+import br.ufjf.ouvimais_api.model.entity.Endereco;
 import br.ufjf.ouvimais_api.service.CidadaoService;
+import br.ufjf.ouvimais_api.service.EnderecoService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +23,14 @@ import java.util.stream.Collectors;
 public class CidadaoController {
 
     private final CidadaoService service;
+    private final EnderecoService enderecoService;
 
-    public CidadaoController(CidadaoService service) {
+    public CidadaoController(
+        CidadaoService service,
+        EnderecoService enderecoService
+    ) {
         this.service = service;
+        this.enderecoService = enderecoService;
     }
 
     @GetMapping()
@@ -39,4 +47,30 @@ public class CidadaoController {
         }
         return ResponseEntity.ok(cidadao.map(CidadaoDTO::create));
     }
+
+    @PostMapping()
+    public ResponseEntity post(@RequestBody CidadaoDTO dto) {
+        try {
+            Cidadao cidadao = convert(dto);
+            cidadao = service.save(cidadao);
+            return new ResponseEntity(cidadao, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    public Cidadao convert(CidadaoDTO dto) {
+        ModelMapper modelMapper = new ModelMapper();
+        Cidadao cidadao = modelMapper.map(dto, Cidadao.class);
+        if (dto.getIdEndereco() != null) {
+            Optional<Endereco> endereco = enderecoService.getEnderecoById(dto.getIdEndereco());
+            if (!endereco.isPresent()) {
+                cidadao.setEndereco(null);
+            } else {
+                cidadao.setEndereco(endereco.get());
+            }
+        }
+        return cidadao;
+    }
+
 }

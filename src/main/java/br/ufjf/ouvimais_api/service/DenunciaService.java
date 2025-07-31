@@ -19,9 +19,9 @@ public class DenunciaService {
 
     public Optional<Denuncia> getDenunciaById(Long id) { return repository.findById(id); }
 
-    public void save(Denuncia denuncia) {
+    public Denuncia save(Denuncia denuncia) {
         // validar regras de negocio
-        repository.save(denuncia);
+        return repository.save(denuncia);
     }
 
     public void delete(Denuncia denuncia) {

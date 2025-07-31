@@ -19,9 +19,9 @@ public class EnderecoService {
 
     public Optional<Endereco> getEnderecoById(Long id) { return repository.findById(id); }
 
-    public void save(Endereco endereco) {
+    public Endereco save(Endereco endereco) {
         // validar regras de negocio
-        repository.save(endereco);
+        return repository.save(endereco);
     }
 
     public void delete(Endereco endereco) {

@@ -19,9 +19,9 @@ public class ElogioService {
 
     public Optional<Elogio> getElogioById(Long id) { return repository.findById(id); }
 
-    public void save(Elogio elogio) {
+    public Elogio save(Elogio elogio) {
         // validar regras de negocio
-        repository.save(elogio);
+        return repository.save(elogio);
     }
 
     public void delete(Elogio elogio) {

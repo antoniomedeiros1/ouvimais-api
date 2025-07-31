@@ -29,9 +29,9 @@ public class CidadeService {
     }
 
     @Transactional
-    public void save(Cidade cidade) {
+    public Cidade save(Cidade cidade) {
         // validar regras de negocio
-        this.repository.save(cidade);
+        return this.repository.save(cidade);
     }
 
     @Transactional

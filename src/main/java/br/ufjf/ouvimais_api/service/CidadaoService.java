@@ -19,9 +19,9 @@ public class CidadaoService {
 
     public Optional<Cidadao> getCidadaoById(Long id) { return repository.findById(id); }
 
-    public void save(Cidadao cidadao) {
+    public Cidadao save(Cidadao cidadao) {
         // validar regras de negocio
-        repository.save(cidadao);
+        return repository.save(cidadao);
     }
 
     public void delete(Cidadao cidadao) {
