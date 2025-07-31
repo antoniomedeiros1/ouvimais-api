@@ -32,4 +32,12 @@ public class Setor {
     public void setInstituicao(Instituicao instituicao) {
         this.instituicao = instituicao;
     }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 }

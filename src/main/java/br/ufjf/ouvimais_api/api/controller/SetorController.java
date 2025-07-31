@@ -1,10 +1,10 @@
 package br.ufjf.ouvimais_api.api.controller;
 
+import br.ufjf.ouvimais_api.api.dto.CidadeDTO;
 import br.ufjf.ouvimais_api.api.dto.SetorDTO;
 import br.ufjf.ouvimais_api.api.dto.SetorDTO;
 import br.ufjf.ouvimais_api.api.dto.SetorDTO;
-import br.ufjf.ouvimais_api.model.entity.Setor;
-import br.ufjf.ouvimais_api.model.entity.Instituicao;
+import br.ufjf.ouvimais_api.model.entity.*;
 import br.ufjf.ouvimais_api.model.entity.Setor;
 import br.ufjf.ouvimais_api.model.entity.Setor;
 import br.ufjf.ouvimais_api.service.InstituicaoService;
@@ -55,6 +55,21 @@ public class SetorController {
             Setor setor = convert(dto);
             setor = service.save(setor);
             return new ResponseEntity(setor, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody SetorDTO dto) {
+        if (!service.getSetorById(id).isPresent()) {
+            return new ResponseEntity("Setor não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            Setor setor = convert(dto);
+            setor.setId(id);
+            service.save(setor);
+            return ResponseEntity.ok(setor);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

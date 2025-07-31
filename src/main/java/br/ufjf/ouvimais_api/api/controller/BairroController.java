@@ -1,6 +1,7 @@
 package br.ufjf.ouvimais_api.api.controller;
 
 import br.ufjf.ouvimais_api.api.dto.BairroDTO;
+import br.ufjf.ouvimais_api.api.dto.CidadeDTO;
 import br.ufjf.ouvimais_api.model.entity.Bairro;
 import br.ufjf.ouvimais_api.model.entity.Cidade;
 import br.ufjf.ouvimais_api.service.BairroService;
@@ -51,6 +52,21 @@ public class BairroController {
             Bairro bairro = convert(dto);
             bairro = service.save(bairro);
             return new ResponseEntity(bairro, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody BairroDTO dto) {
+        if (!service.getBairroById(id).isPresent()) {
+            return new ResponseEntity("Bairro não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            Bairro bairro = convert(dto);
+            bairro.setId(id);
+            service.save(bairro);
+            return ResponseEntity.ok(bairro);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

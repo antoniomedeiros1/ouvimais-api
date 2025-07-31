@@ -1,5 +1,6 @@
 package br.ufjf.ouvimais_api.api.controller;
 
+import br.ufjf.ouvimais_api.api.dto.CidadeDTO;
 import br.ufjf.ouvimais_api.api.dto.ElogioDTO;
 import br.ufjf.ouvimais_api.api.dto.ElogioDTO;
 import br.ufjf.ouvimais_api.api.dto.ElogioDTO;
@@ -57,6 +58,21 @@ public class ElogioController {
             Elogio elogio = convert(dto);
             elogio = service.save(elogio);
             return new ResponseEntity(elogio, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody ElogioDTO dto) {
+        if (!service.getElogioById(id).isPresent()) {
+            return new ResponseEntity("Elogio não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            Elogio elogio = convert(dto);
+            elogio.setId(id);
+            service.save(elogio);
+            return ResponseEntity.ok(elogio);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

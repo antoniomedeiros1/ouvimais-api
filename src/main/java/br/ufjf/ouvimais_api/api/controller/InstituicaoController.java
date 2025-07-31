@@ -1,10 +1,10 @@
 package br.ufjf.ouvimais_api.api.controller;
 
+import br.ufjf.ouvimais_api.api.dto.CidadeDTO;
 import br.ufjf.ouvimais_api.api.dto.InstituicaoDTO;
 import br.ufjf.ouvimais_api.api.dto.InstituicaoDTO;
 import br.ufjf.ouvimais_api.api.dto.InstituicaoDTO;
-import br.ufjf.ouvimais_api.model.entity.Instituicao;
-import br.ufjf.ouvimais_api.model.entity.Endereco;
+import br.ufjf.ouvimais_api.model.entity.*;
 import br.ufjf.ouvimais_api.model.entity.Instituicao;
 import br.ufjf.ouvimais_api.model.entity.Instituicao;
 import br.ufjf.ouvimais_api.service.EnderecoService;
@@ -55,6 +55,21 @@ public class InstituicaoController {
             Instituicao instituicao = convert(dto);
             instituicao = service.save(instituicao);
             return new ResponseEntity(instituicao, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody InstituicaoDTO dto) {
+        if (!service.getInstituicaoById(id).isPresent()) {
+            return new ResponseEntity("Instituicao não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            Instituicao instituicao = convert(dto);
+            instituicao.setId(id);
+            service.save(instituicao);
+            return ResponseEntity.ok(instituicao);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

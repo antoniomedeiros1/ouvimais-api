@@ -1,10 +1,10 @@
 package br.ufjf.ouvimais_api.api.controller;
 
+import br.ufjf.ouvimais_api.api.dto.CidadeDTO;
 import br.ufjf.ouvimais_api.api.dto.EnderecoDTO;
 import br.ufjf.ouvimais_api.api.dto.EnderecoDTO;
 import br.ufjf.ouvimais_api.api.dto.EnderecoDTO;
-import br.ufjf.ouvimais_api.model.entity.Endereco;
-import br.ufjf.ouvimais_api.model.entity.Bairro;
+import br.ufjf.ouvimais_api.model.entity.*;
 import br.ufjf.ouvimais_api.model.entity.Endereco;
 import br.ufjf.ouvimais_api.model.entity.Endereco;
 import br.ufjf.ouvimais_api.service.BairroService;
@@ -47,6 +47,21 @@ public class EnderecoController {
             return new ResponseEntity("Endereco nao encontrado", HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(endereco.map(EnderecoDTO::create));
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody EnderecoDTO dto) {
+        if (!service.getEnderecoById(id).isPresent()) {
+            return new ResponseEntity("Endereco não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            Endereco endereco = convert(dto);
+            endereco.setId(id);
+            service.save(endereco);
+            return ResponseEntity.ok(endereco);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping()

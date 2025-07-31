@@ -2,8 +2,10 @@ package br.ufjf.ouvimais_api.api.controller;
 
 import br.ufjf.ouvimais_api.api.dto.CidadaoDTO;
 import br.ufjf.ouvimais_api.api.dto.CidadaoDTO;
+import br.ufjf.ouvimais_api.api.dto.CidadeDTO;
 import br.ufjf.ouvimais_api.model.entity.Cidadao;
 import br.ufjf.ouvimais_api.model.entity.Cidadao;
+import br.ufjf.ouvimais_api.model.entity.Cidade;
 import br.ufjf.ouvimais_api.model.entity.Endereco;
 import br.ufjf.ouvimais_api.service.CidadaoService;
 import br.ufjf.ouvimais_api.service.EnderecoService;
@@ -54,6 +56,21 @@ public class CidadaoController {
             Cidadao cidadao = convert(dto);
             cidadao = service.save(cidadao);
             return new ResponseEntity(cidadao, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody CidadaoDTO dto) {
+        if (!service.getCidadaoById(id).isPresent()) {
+            return new ResponseEntity("Cidadao não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            Cidadao cidadao = convert(dto);
+            cidadao.setId(id);
+            service.save(cidadao);
+            return ResponseEntity.ok(cidadao);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

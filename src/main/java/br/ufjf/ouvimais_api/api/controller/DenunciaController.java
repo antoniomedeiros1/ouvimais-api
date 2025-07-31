@@ -1,5 +1,6 @@
 package br.ufjf.ouvimais_api.api.controller;
 
+import br.ufjf.ouvimais_api.api.dto.CidadeDTO;
 import br.ufjf.ouvimais_api.api.dto.DenunciaDTO;
 import br.ufjf.ouvimais_api.api.dto.DenunciaDTO;
 import br.ufjf.ouvimais_api.api.dto.DenunciaDTO;
@@ -59,6 +60,21 @@ public class DenunciaController {
             Denuncia denuncia = convert(dto);
             denuncia = service.save(denuncia);
             return new ResponseEntity(denuncia, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody DenunciaDTO dto) {
+        if (!service.getDenunciaById(id).isPresent()) {
+            return new ResponseEntity("Denuncia não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            Denuncia denuncia = convert(dto);
+            denuncia.setId(id);
+            service.save(denuncia);
+            return ResponseEntity.ok(denuncia);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

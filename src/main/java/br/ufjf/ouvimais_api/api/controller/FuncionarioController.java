@@ -1,10 +1,10 @@
 package br.ufjf.ouvimais_api.api.controller;
 
+import br.ufjf.ouvimais_api.api.dto.CidadeDTO;
 import br.ufjf.ouvimais_api.api.dto.FuncionarioDTO;
 import br.ufjf.ouvimais_api.api.dto.FuncionarioDTO;
 import br.ufjf.ouvimais_api.api.dto.FuncionarioDTO;
-import br.ufjf.ouvimais_api.model.entity.Funcionario;
-import br.ufjf.ouvimais_api.model.entity.Instituicao;
+import br.ufjf.ouvimais_api.model.entity.*;
 import br.ufjf.ouvimais_api.model.entity.Funcionario;
 import br.ufjf.ouvimais_api.model.entity.Funcionario;
 import br.ufjf.ouvimais_api.service.FuncionarioService;
@@ -55,6 +55,21 @@ public class FuncionarioController {
             Funcionario funcionario = convert(dto);
             funcionario = service.save(funcionario);
             return new ResponseEntity(funcionario, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody FuncionarioDTO dto) {
+        if (!service.getFuncionarioById(id).isPresent()) {
+            return new ResponseEntity("Funcionario não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            Funcionario funcionario = convert(dto);
+            funcionario.setId(id);
+            service.save(funcionario);
+            return ResponseEntity.ok(funcionario);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

@@ -1,5 +1,6 @@
 package br.ufjf.ouvimais_api.api.controller;
 
+import br.ufjf.ouvimais_api.api.dto.CidadeDTO;
 import br.ufjf.ouvimais_api.api.dto.ReclamacaoDTO;
 import br.ufjf.ouvimais_api.api.dto.ReclamacaoDTO;
 import br.ufjf.ouvimais_api.api.dto.ReclamacaoDTO;
@@ -61,6 +62,21 @@ public class ReclamacaoController {
             Reclamacao reclamacao = convert(dto);
             reclamacao = service.save(reclamacao);
             return new ResponseEntity(reclamacao, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody ReclamacaoDTO dto) {
+        if (!service.getReclamacaoById(id).isPresent()) {
+            return new ResponseEntity("Reclamacao não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            Reclamacao reclamacao = convert(dto);
+            reclamacao.setId(id);
+            service.save(reclamacao);
+            return ResponseEntity.ok(reclamacao);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

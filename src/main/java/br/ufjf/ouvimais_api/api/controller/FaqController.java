@@ -1,10 +1,10 @@
 package br.ufjf.ouvimais_api.api.controller;
 
+import br.ufjf.ouvimais_api.api.dto.CidadeDTO;
 import br.ufjf.ouvimais_api.api.dto.FaqDTO;
 import br.ufjf.ouvimais_api.api.dto.FaqDTO;
 import br.ufjf.ouvimais_api.api.dto.FaqDTO;
-import br.ufjf.ouvimais_api.model.entity.Faq;
-import br.ufjf.ouvimais_api.model.entity.Instituicao;
+import br.ufjf.ouvimais_api.model.entity.*;
 import br.ufjf.ouvimais_api.model.entity.Faq;
 import br.ufjf.ouvimais_api.model.entity.Faq;
 import br.ufjf.ouvimais_api.service.InstituicaoService;
@@ -55,6 +55,21 @@ public class FaqController {
             Faq faq = convert(dto);
             faq = service.save(faq);
             return new ResponseEntity(faq, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody FaqDTO dto) {
+        if (!service.getFaqById(id).isPresent()) {
+            return new ResponseEntity("Faq não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            Faq faq = convert(dto);
+            faq.setId(id);
+            service.save(faq);
+            return ResponseEntity.ok(faq);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
