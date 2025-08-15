@@ -1,6 +1,7 @@
 package br.ufjf.ouvimais_api.service;
 
 import br.ufjf.ouvimais_api.model.entity.Bairro;
+import br.ufjf.ouvimais_api.model.entity.Cidade;
 import br.ufjf.ouvimais_api.model.repository.BairroRepository;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,10 @@ public class BairroService {
 
     public Optional<Bairro> getBairroById(Long id) {
         return repository.findById(id);
+    }
+
+    public List<Bairro> getBairrosByCidade(Optional<Cidade> cidade) {
+        return repository.findByCidade(cidade);
     }
 
     @Transactional

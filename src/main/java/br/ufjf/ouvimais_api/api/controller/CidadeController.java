@@ -1,11 +1,14 @@
 package br.ufjf.ouvimais_api.api.controller;
 
+import br.ufjf.ouvimais_api.api.dto.BairroDTO;
 import br.ufjf.ouvimais_api.api.dto.CidadeDTO;
 import br.ufjf.ouvimais_api.api.dto.CidadeDTO;
 import br.ufjf.ouvimais_api.api.dto.CidadeDTO;
+import br.ufjf.ouvimais_api.model.entity.Bairro;
 import br.ufjf.ouvimais_api.model.entity.Cidade;
 import br.ufjf.ouvimais_api.model.entity.Cidade;
 import br.ufjf.ouvimais_api.model.entity.Cidade;
+import br.ufjf.ouvimais_api.service.BairroService;
 import br.ufjf.ouvimais_api.service.CidadeService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -22,9 +25,11 @@ import java.util.stream.Collectors;
 public class CidadeController {
 
     private final CidadeService service;
+    private final BairroService bairroService;
 
-    public CidadeController(CidadeService service) {
+    public CidadeController(CidadeService service, BairroService bairroService) {
         this.service = service;
+        this.bairroService = bairroService;
     }
 
     @GetMapping()
@@ -41,6 +46,16 @@ public class CidadeController {
             return new ResponseEntity("Cidade nao encontrado", HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(cidade.map(CidadeDTO::create));
+    }
+
+    @GetMapping("/{id}/bairros")
+    public ResponseEntity getBairros(@PathVariable("id") Long id) {
+        Optional<Cidade> cidade = service.getCidadeById(id);
+        if (!cidade.isPresent()){
+            return new ResponseEntity("Cidade nao encontrado", HttpStatus.NOT_FOUND);
+        }
+        List<Bairro> bairros = bairroService.getBairrosByCidade(cidade);
+        return ResponseEntity.ok(bairros.stream().map(BairroDTO::create).collect(Collectors.toList()));
     }
 
     @PostMapping()
